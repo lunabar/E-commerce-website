@@ -1,12 +1,13 @@
 <script setup>
-import { onMounted } from 'vue'
+// import { onMounted } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-import {getCategoryAPI} from '@/apis/testApi'
+// import {getCategoryAPI} from '@/apis/testApi.js'
 
-onMounted(async() => {
-  const res = await getCategoryAPI()
-  console.log(res.data)
-})
+
+// onMounted(async() => {
+//   const res = await getCategoryAPI()
+//   console.log(res.data)
+// })
 
 
 
@@ -14,9 +15,12 @@ onMounted(async() => {
 </script>
 
 <template>
-  <el-button type="primary">Primary</el-button>
+  <router-view/>
+  <div class="g">gidle</div>
 </template>
 
-<style scoped>
-
+<style scoped lang='scss'>
+  .g{
+    color: $helpColor;
+  }
 </style>
