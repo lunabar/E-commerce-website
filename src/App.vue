@@ -15,7 +15,7 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <router-view/>
+  <RouterView/>
   <div class="g">gidle</div>
 </template>
 
