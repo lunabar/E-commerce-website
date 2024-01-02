@@ -1,15 +1,10 @@
 <script setup>
-    import {getCategoryAPI} from '@/apis/layout.js'
-    import {onMounted, ref} from 'vue'
-    const categoryList = ref([]) 
-    const getCategory = async() => {
-        const res = await getCategoryAPI()
-        categoryList.value = res.data.result
-        console.log(res.data.result)
-    }
-    onMounted(() => {
-        getCategory()
-    })
+    import {useCategoryStore} from '@/stores/category.js'
+
+    // 得到发送请求后，响应数据到state，可以直接用categoryList
+    const categoryStore = useCategoryStore()
+
+    
     
 </script>
 
@@ -20,7 +15,7 @@
         <RouterLink to="/">小兔鲜</RouterLink>
       </h1>
       <ul class="app-header-nav">
-        <li class="home" v-for="item in categoryList" :key="item.id">
+        <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
           <RouterLink to="/">{{item.name}}</RouterLink>
         </li>
       </ul>

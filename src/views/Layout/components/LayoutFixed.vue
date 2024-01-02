@@ -1,7 +1,12 @@
 <script setup>
+    import {useCategoryStore} from '@/stores/category.js'
+
 // vueuse是个封装好组合式api函数的插件，它的useScroll函数可以帮我们获取滚动条的高度
     import {useScroll} from '@vueuse/core'
     const {y} = useScroll(window)
+
+    const categoryStore = useCategoryStore()
+    
 </script>
 
 <template>
@@ -10,39 +15,12 @@
   <div class="app-header-sticky" :class="{show: y>78}">
     <div class="container">
       <RouterLink class="logo" to="/" />
-      {{y}}
       <!-- 导航区域 -->
       <ul class="app-header-nav ">
-        <li class="home">
-          <RouterLink to="/">首页</RouterLink>
+        <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
+          <RouterLink to="/">{{item.name}}</RouterLink>
         </li>
-        <li>
-          <RouterLink to="/">居家</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">美食</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">服饰</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">母婴</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">个护</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">严选</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">数码</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">运动</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">杂项</RouterLink>
-        </li>
+        
       </ul>
 
       <div class="right">
