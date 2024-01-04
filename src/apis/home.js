@@ -14,3 +14,10 @@ export function getNewAPI(){
         url: '/home/new',
     })
 }
+
+// 获取人气好物
+export function getHotAPI(){
+    return http({
+        url: '/home/hot',
+    })
+}
