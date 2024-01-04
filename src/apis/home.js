@@ -7,3 +7,10 @@ export function getBannerAPI() {
         url: '/home/banner',
     })
 }
+
+// 获取新鲜好物
+export function getNewAPI(){
+    return http({
+        url: '/home/new',
+    })
+}
