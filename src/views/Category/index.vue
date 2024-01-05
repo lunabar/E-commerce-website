@@ -3,6 +3,7 @@ import { getTopCategoryAPI } from "@/apis/category.js";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { getBannerAPI } from "@/apis/home.js";
+import HomeGoodsItem from '@/views/Home/components/HomeGoodsItem.vue'
 
 const topCategory = ref({});
 const route = useRoute();
@@ -39,6 +40,29 @@ onMounted(() => getCategoryBanner());
             <img :src="item.imgUrl" alt="" />
           </el-carousel-item>
         </el-carousel>
+      </div>
+      <div class="sub-list">
+        <h3>全部分类</h3>
+        <ul>
+          <li v-for="i in topCategory.children" :key="i.id">
+            <RouterLink to="/">
+              <img :src="i.picture" />
+              <p>{{ i.name }}</p>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <div
+        class="ref-goods"
+        v-for="item in topCategory.children"
+        :key="item.id"
+      >
+        <div class="head">
+          <h3>- {{ item.name }}-</h3>
+        </div>
+        <div class="body">
+          <HomeGoodsItem v-for="good in item.goods" :good="good" :key="good.id" />
+        </div>
       </div>
     </div>
   </div>
@@ -122,16 +146,15 @@ onMounted(() => getCategoryBanner());
     padding: 25px 0;
   }
   .home-banner {
-  width: 1240px;
-  height: 500px;
-  margin: 0 auto;
-  z-index: 98;
-
-  img {
-    width: 100%;
+    width: 1240px;
     height: 500px;
-  }
-}
+    margin: 0 auto;
+    z-index: 98;
 
+    img {
+      width: 100%;
+      height: 500px;
+    }
+  }
 }
 </style>
