@@ -2,9 +2,13 @@ import http from '@/utils/http.js'
 
 // 获取banner
 
-export function getBannerAPI() {
-    return http({
+export function getBannerAPI(params = {}) {
+    const {distribution='1'} = params
+    return http({ 
         url: '/home/banner',
+        params: {
+            distribution,
+        }
     })
 }
 

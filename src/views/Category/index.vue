@@ -1,17 +1,26 @@
 <script setup>
-    import {getTopCategoryAPI} from '@/apis/category.js'
-    import {onMounted, ref} from 'vue'
-    import {useRoute} from 'vue-router'
+import { getTopCategoryAPI } from "@/apis/category.js";
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import { getBannerAPI } from "@/apis/home.js";
 
-    const topCategory = ref({})
-    const route = useRoute()
-    const getTopCategory = async() => {
-        const res = await getTopCategoryAPI(route.params.id)
-        console.log('面包屑的数据', res)
-        topCategory.value = res.data.result
-    }
+const topCategory = ref({});
+const route = useRoute();
+const getTopCategory = async () => {
+  const res = await getTopCategoryAPI(route.params.id);
+  console.log("面包屑的数据", res);
+  topCategory.value = res.data.result;
+};
+onMounted(() => getTopCategory());
 
-    onMounted(() => getTopCategory())
+const categoryBannerList = ref([]);
+const params = { distribution: 2 };
+const getCategoryBanner = async () => {
+  const res = await getBannerAPI(params);
+  console.log("分类中的轮播图数据", res);
+  categoryBannerList.value = res.data.result;
+};
+onMounted(() => getCategoryBanner());
 </script>
 
 <template>
@@ -21,8 +30,15 @@
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>{{topCategory.name}}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ topCategory.name }}</el-breadcrumb-item>
         </el-breadcrumb>
+      </div>
+      <div class="home-banner">
+        <el-carousel height="500px">
+          <el-carousel-item v-for="item in categoryBannerList" :key="item.id">
+            <img :src="item.imgUrl" alt="" />
+          </el-carousel-item>
+        </el-carousel>
       </div>
     </div>
   </div>
@@ -51,7 +67,6 @@
       li {
         width: 168px;
         height: 160px;
-
 
         a {
           text-align: center;
@@ -106,5 +121,17 @@
   .bread-container {
     padding: 25px 0;
   }
+  .home-banner {
+  width: 1240px;
+  height: 500px;
+  margin: 0 auto;
+  z-index: 98;
+
+  img {
+    width: 100%;
+    height: 500px;
+  }
+}
+
 }
 </style>
