@@ -20,6 +20,8 @@ onMounted(() => {
   <LayoutFixed />
   <LayoutNav />
   <LayoutHeader />
+  <!-- 加key强制组件不同，从而复用的时候能再次渲染；缺点：暴力，整体组件渲染，但是导航栏和footer组件并没有数据更新无需再次渲染，造成资源浪费 -->
+  <!-- <RouterView :key="$route.fullPath"/> -->
   <RouterView />
   <LayoutFooter />
 </template>

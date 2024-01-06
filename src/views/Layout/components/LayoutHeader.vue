@@ -16,6 +16,7 @@
       </h1>
       <ul class="app-header-nav">
         <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
+          <!-- 如果不加active-class激活样式，就只是hover导航栏的哪个部分，绿字绿下划线显示一下，鼠标点击完图标走后，不会有样式；有active-class切换导航，用active样式切换 -->
           <RouterLink active-class="active" :to="`/category/${item.id}`">{{item.name}}</RouterLink>
         </li>
       </ul>
