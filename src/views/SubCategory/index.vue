@@ -2,8 +2,10 @@
     import { getCategoryFilterAPI } from '@/apis/category.js'
     import { useRoute } from 'vue-router'
     import { ref, onMounted } from 'vue'
+    import HomeGoodsItem from '@/views/Home/components/HomeGoodsItem.vue'
+    import { getSubCategoryAPI } from '@/apis/category.js'
     const route = useRoute()
-    const categoryData = ref([])
+    const categoryData = ref({})
     const getCategoryData = async() => {
         const res = await getCategoryFilterAPI(route.params.id)
         console.log('二级category的res：', res)
@@ -11,6 +13,24 @@
     }
     onMounted(() => {
         getCategoryData()
+    })
+
+    const reqData = ref({
+        categoryId: route.params.id,
+        page: 1,
+        pageSize: 20,
+        sortField: 'publishTime',
+    })
+
+    const goodList = ref([])
+    const getSubCategory = async() => {
+        const res = await getSubCategoryAPI(reqData)
+        console.log('二级分类下商品信息的res：',res)
+        goodList.value = res.data.result.items
+    }
+
+    onMounted(() => {
+        getSubCategory()
     })
 
 
@@ -36,6 +56,7 @@
       </el-tabs>
       <div class="body">
          <!-- 商品列表-->
+         <HomeGoodsItem v-for="item in goodList" :key="item.id" :good='item'/>
       </div>
     </div>
   </div>

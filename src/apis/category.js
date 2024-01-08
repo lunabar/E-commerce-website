@@ -19,3 +19,12 @@ export function getCategoryFilterAPI(id){
       }
     })
   }
+
+// 二级分类后商品信息接口
+export function getSubCategoryAPI(data){
+    return http({
+        url: '/category/goods/temporary',
+        method: 'POST',
+        data,
+    })
+}
