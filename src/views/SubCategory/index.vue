@@ -1,7 +1,19 @@
 <script setup>
-    // import { useCategory } from '@/views/Category/composables/useCategory.js'
-    // const { topCategory } = useCategory()
-    // console.log('topCategory:',topCategory)
+    import { getCategoryFilterAPI } from '@/apis/category.js'
+    import { useRoute } from 'vue-router'
+    import { ref, onMounted } from 'vue'
+    const route = useRoute()
+    const categoryData = ref([])
+    const getCategoryData = async() => {
+        const res = await getCategoryFilterAPI(route.params.id)
+        console.log('二级category的res：', res)
+        categoryData.value = res.data.result
+    }
+    onMounted(() => {
+        getCategoryData()
+    })
+
+
 
 
 </script>
@@ -12,8 +24,8 @@
     <div class="bread-container">
       <el-breadcrumb separator=">">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/' }">居家</el-breadcrumb-item>
-        <el-breadcrumb-item>居家生活用品</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: `/category/${categoryData.parentId}` }">{{categoryData.parentName}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{categoryData.name}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="sub-container">
