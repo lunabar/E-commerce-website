@@ -17,10 +17,17 @@ const target = ref(null)
 console.log('target为',target)
 const left = ref(0)
 const top = ref(0)
+const positionX = ref(0)
+const positionY = ref(0)
 const {elementX, elementY, isOutside} = useMouseInElement(target)
-watch([elementX, elementY], () => {
+watch([elementX, elementY, isOutside], () => {
+    // console.log('xy变化了')
+    // 这个x和y随鼠标改变着，即使鼠标不在活动范围内，这样其实下面不用执行
+    // 优化性能
+    if(isOutside.value) return
     // 有效范围内控制滑块距离
     // 横向
+    // console.log('后续逻辑会执行')
     if(elementX.value > 100 && elementX.value < 300){
         left.value = elementX.value - 100
     }
@@ -33,6 +40,9 @@ watch([elementX, elementY], () => {
     if(elementX.value > 200) {left.value = 200}
     if(elementY.value < 100) {top.value = 0}
     if(elementY.value > 200) {top.value = 200}
+
+    positionX.value = -left.value * 2
+    positionY.value = -top.value * 2
 })
     
 
@@ -47,7 +57,7 @@ watch([elementX, elementY], () => {
     <div class="middle" ref="target">
       <img :src="imageList[openImgindex]" alt="" />
       <!-- 蒙层小滑块 -->
-      <div class="layer" :style="{ left: `${left}px`, top: `${top}px` }" ></div>
+      <div class="layer" :style="{ left: `${left}px`, top: `${top}px`}" v-show='!isOutside'></div>
     </div>
     <!-- 小图列表 -->
     <ul class="small">
@@ -59,10 +69,10 @@ watch([elementX, elementY], () => {
     <div class="large" :style="[
       {
         backgroundImage: `url(${imageList[0]})`,
-        backgroundPositionX: `0px`,
-        backgroundPositionY: `0px`,
+        backgroundPositionX: `${positionX}px`,
+        backgroundPositionY: `${positionY}px`,
       },
-    ]" v-show="false"></div>
+    ]" v-show="!isOutside"></div>
   </div>
 </template>
 
