@@ -119,8 +119,10 @@
             </div>
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
-                <DetailHot />
-                <DetailHot />
+                <!-- 24小时热榜 -->
+                <DetailHot :hotType='1'/>
+                <!-- 周榜 -->
+                <DetailHot :hotType='2'/>
             </div>
           </div>
         </div>
