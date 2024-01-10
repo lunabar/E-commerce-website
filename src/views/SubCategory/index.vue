@@ -36,6 +36,7 @@
     const disabled = ref(false)
     // tab切换回调
     const tabChange = () => {
+        // 点击tab更换排列方式的时候，第一个把停止无限加载改为false，使之可以重新无限加载，改当前页为1，回归从第一页开始
         disabled.value = false
         reqData.value.page = 1 
         getSubCategory()
@@ -44,11 +45,14 @@
     
     const load = async() => {
         // console.log('加载触底了')
+        // 当前页触底了，请求获取新一页的数据
         reqData.value.page++
         const res = await getSubCategoryAPI(reqData.value)
         if(res.data.result.items.length){
+            // 新数据与旧数据一起连接渲染页面
             goodList.value = [...goodList.value, ...res.data.result.items]
         }else{
+            // 满足新数据数组的长度为0时，说明已无新数据了，停止无限加载
             disabled.value = true
         }
         

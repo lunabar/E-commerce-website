@@ -2,6 +2,7 @@
     import { getDetailAPI } from '@/apis/detail.js'
     import { useRoute } from 'vue-router'
     import { ref, onMounted } from 'vue'
+    import DetailHot from './components/DetailHot.vue'
     const route = useRoute()
     const goods = ref({})
     const getDetail = async () => {
@@ -16,6 +17,11 @@
 <template>
   <div class="xtx-goods-page">
     <div class="container" v-if="goods.details">
+        <!-- 
+            错误原因：goods一开始{}  {}.categories -> undefined  -> undefined[1]
+            1. 可选链的语法?. 
+            2. v-if手动控制渲染时机 保证只有数据存在才渲染
+           -->
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -113,7 +119,8 @@
             </div>
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
-
+                <DetailHot />
+                <DetailHot />
             </div>
           </div>
         </div>

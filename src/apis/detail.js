@@ -8,3 +8,14 @@ export function getDetailAPI(id){
         }
     })
 }
+
+export function getHotGoodsAPI({id, type, limit=3}){
+    return http({
+        url: '/goods/hot',
+        params: {
+            id,
+            type,
+            limit,
+        }
+    })
+}
