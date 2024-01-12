@@ -3,7 +3,8 @@
     import { useRoute } from 'vue-router'
     import { ref, onMounted } from 'vue'
     import DetailHot from './components/DetailHot.vue'
-    import ImageView from '@/components/index.vue'
+    import ImageView from '@/components/ImageView/index.vue'
+    import XtuSku from '@/components/XtuSku/index.vue'
     const route = useRoute()
     const goods = ref({})
     const getDetail = async () => {
@@ -12,6 +13,9 @@
         goods.value = res.data.result
     }
     onMounted(() => getDetail())
+    const changeEmit = (sku) => {
+      console.log('emit触发传送的信息',sku)
+    }
 
 </script>
 
@@ -86,6 +90,7 @@
                 </dl>
               </div>
               <!-- sku组件 -->
+              <XtuSku :goods='goods' @change="changeEmit"/>
 
               <!-- 数据组件 -->
 
