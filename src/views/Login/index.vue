@@ -3,6 +3,7 @@
     const form = ref({
         account: '',
         password: '',
+        agree: true,
     })
     const rules = {
         account: [
@@ -11,7 +12,18 @@
         password: [
             {required: true, message: '密码不能为空', trigger: 'blur'},
             {min: 6, max: 14, message: '密码字符长度在6-14之间', trigger: 'blur'}
-        ]
+        ],
+        agree: [{
+            // 自定义校验逻辑
+            validator: (rule, val, callback) => {
+                // val是当前属性的值
+                if(!val){
+                    callback(new Error('请勾选协议'))
+                }else{
+                    callback()
+                }
+            }
+        }]
     }
 
 </script>
@@ -45,8 +57,8 @@
               <el-form-item prop='password' label="密码">
                 <el-input v-model='form.password'/>
               </el-form-item>
-              <el-form-item label-width="22px">
-                <el-checkbox  size="large">
+              <el-form-item prop='agree' label-width="22px">
+                <el-checkbox  v-model='form.agree' size="large">
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
