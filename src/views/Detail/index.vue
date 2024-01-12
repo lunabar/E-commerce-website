@@ -3,8 +3,8 @@
     import { useRoute } from 'vue-router'
     import { ref, onMounted } from 'vue'
     import DetailHot from './components/DetailHot.vue'
-    import ImageView from '@/components/ImageView/index.vue'
-    import XtuSku from '@/components/XtuSku/index.vue'
+    // import ImageView from '@/components/ImageView/index.vue'
+    // import XtuSku from '@/components/XtuSku/index.vue'
     const route = useRoute()
     const goods = ref({})
     const getDetail = async () => {
