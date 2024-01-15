@@ -2,6 +2,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useUserStore } from '@/stores/user.js'
+import router from '@/router/index.js'
 
 const http = axios.create({
     baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
@@ -11,6 +12,7 @@ const http = axios.create({
 // 添加请求拦截器
 http.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
+    // 很多请求需要携带token，说明登录状态
     const userStore = useUserStore()
     const token = userStore.userInfo.token
     if(token) {
@@ -31,7 +33,13 @@ http.interceptors.response.use(function (response) {
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
     // 统一错误提示
-    console.log(error)
+    console.log('error:',error)
+    // 响应状态码为401，说明token已失效
+    // 1.先清空过期的用户信息
+    const userStore = useUserStore()
+    userStore.clearUserInfo()
+    // 2.跳转到登录页
+    router.replace({path: '/login'})
     ElMessage({
       type: 'warning',
       message: error.response.data.message

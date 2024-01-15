@@ -3,10 +3,14 @@
     import { useRoute } from 'vue-router'
     import { ref, onMounted } from 'vue'
     import DetailHot from './components/DetailHot.vue'
+    import { ElMessage } from "element-plus"
+    import { useCartStore } from '@/stores/cartStore.js'
     // import ImageView from '@/components/ImageView/index.vue'
     // import XtuSku from '@/components/XtuSku/index.vue'
     const route = useRoute()
     const goods = ref({})
+    let skuInfo = {}
+
     const getDetail = async () => {
         const res = await getDetailAPI(route.params.id)
         console.log('二级详情页信息：',res)
@@ -15,6 +19,33 @@
     onMounted(() => getDetail())
     const changeEmit = (sku) => {
       console.log('emit触发传送的信息',sku)
+      skuInfo = sku
+      console.log('skuInfo:',skuInfo)
+    }
+    const count = ref(1)
+    const handleChange = (count) => {
+      console.log('count:', count)
+    }
+    // 组件点击加入购物车按钮，触发了addCart回调函数
+    const addCart = () => {
+      // 1.sku规格选择了，调用store里的addCart函数（传商品参数）
+      if (skuInfo.skuId) {
+        const cartStore = useCartStore()
+        cartStore.addCart({
+          id: goods.value.id,
+          name: goods.value.name,
+          picture: goods.value.mainPictures[0],
+          price: goods.value.price,
+          count: count.value,
+          skuId: skuInfo.skuId,
+          attrsText: skuInfo.specsText,
+          selected: true,
+        })
+      }else{
+       // 2.sku规格未选择，提醒用户选择参数 
+       ElMessage.warning('请选择规格')
+      }
+      
     }
 
 </script>
@@ -93,10 +124,10 @@
               <XtuSku :goods='goods' @change="changeEmit"/>
 
               <!-- 数据组件 -->
-
+              <el-input-number v-model='count' @change='handleChange' />
               <!-- 按钮组件 -->
               <div>
-                <el-button size="large" class="btn">
+                <el-button size="large" class="btn" @click="addCart">
                   加入购物车
                 </el-button>
               </div>
