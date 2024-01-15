@@ -17,9 +17,15 @@ export const useCartStore = defineStore('cartStore', () => {
             cartList.value.push(goodsParams)
         }
     }
+    // 删除Header购物车里的指定商品
+    const deleteCart = (skuId) => {
+        const index = cartList.value.findIndex((item) => item.skuId === skuId)
+        cartList.value.splice(index,1)
+    }
     return {
         cartList,
         addCart,
+        deleteCart,
     }
 },
 // 解决刷新页面不释放内存问题
