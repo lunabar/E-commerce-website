@@ -42,6 +42,7 @@ const doLogin = () => {
     // valid: 所有表单都通过校验  才为true
     if (valid) {
       await userStore.getUserInfo({account, password})
+      console.log('userStore.userInfo:',userStore.userInfo)
       // 提示用户
       ElMessage({ type: "success", message: "登录成功" });
       // 跳转页面
