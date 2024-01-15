@@ -1,5 +1,6 @@
 <script setup>
     import {useCategoryStore} from '@/stores/category.js'
+    import HeaderCart from './HeaderCart.vue'
 
     // 得到发送请求后，响应数据到state，可以直接用categoryList
     const categoryStore = useCategoryStore()
@@ -25,6 +26,7 @@
         <input type="text" placeholder="搜一搜">
       </div>
       <!-- 头部购物车 -->
+      <HeaderCart />
       
     </div>
   </header>
