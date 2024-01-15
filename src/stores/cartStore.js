@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 export const useCartStore = defineStore('cartStore', () => {
     // state
     const cartList = ref([])
-    console.log('cartList.value.skuId', cartList.value.skuId)
     // active
     const addCart = (goodsParams) => {
         // 添加购物车操作
@@ -22,10 +21,17 @@ export const useCartStore = defineStore('cartStore', () => {
         const index = cartList.value.findIndex((item) => item.skuId === skuId)
         cartList.value.splice(index,1)
     }
+    // 计算属性总数和总价
+    const allCount = computed(() => cartList.value.reduce((a,b) => a+b.count ,0 )
+    )
+    const allPrice = computed(() => cartList.value.reduce((a,b) => a+b.count * b.price ,0)
+    )
     return {
         cartList,
         addCart,
         deleteCart,
+        allCount,
+        allPrice,
     }
 },
 // 解决刷新页面不释放内存问题
