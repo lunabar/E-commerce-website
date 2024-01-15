@@ -1,6 +1,15 @@
 <script setup>
   import { useUserStore } from '@/stores/user.js'
+  import { useRouter } from 'vue-router'
   const userStore = useUserStore()
+  const router = useRouter()
+  // 点击确认触发回调函数
+  const confirm = () => {
+    // 1.删除用户信息
+    userStore.clearUserInfo()
+    // 2.返回登录页
+    router.replace({path: '/login'})
+  }
 
 </script>
 
@@ -14,7 +23,8 @@
             <el-popconfirm 
             title="确认退出吗" 
             confirm-button-text="确认" 
-            cancel-button-text="取消">
+            cancel-button-text="取消"
+            @confirm='confirm'>
               <template #reference>
                 <a href="javascript:;">退出登录</a>
               </template>
