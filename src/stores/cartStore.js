@@ -31,14 +31,21 @@ export const useCartStore = defineStore('cartStore', () => {
     // 全选决定单选，全选的状态就是每个单选的状态
     const checkAll = (selectedValue) => cartList.value.forEach(item => item.selected = selectedValue)
 
+    // 单选决定全选,只有单选全部为selected，isAll才为true
+    const isAll = computed(() => cartList.value.every(item => item.selected===true))
+
     // 计算属性总数和总价
     const allCount = computed(() => cartList.value.reduce((a,b) => a+b.count ,0 )
     )
     const allPrice = computed(() => cartList.value.reduce((a,b) => a+b.count * b.price ,0)
     )
 
-    // 单选决定全选,只有单选全部为selected，isAll才为true
-    const isAll = computed(() => cartList.value.every(item => item.selected===true))
+    // 计算购物车列表详情的商品总数和总价
+    // 已选择数量=cartList中所有selected字段为true的count之后
+    const selectedCount = computed(() => cartList.value.filter(item => item.selected === true).reduce((a, c) => a + c.count, 0))
+    // 商品合计
+    const selectedPrice = computed(() => cartList.value.filter(item => item.selected === true).reduce((a, c) => a + c.count * c.price, 0))
+    
     return {
         cartList,
         addCart,
@@ -48,6 +55,8 @@ export const useCartStore = defineStore('cartStore', () => {
         allCount,
         allPrice,
         isAll,
+        selectedCount,
+        selectedPrice,
     }
 },
 // 解决刷新页面不释放内存问题
