@@ -1,6 +1,11 @@
 <script setup>
 import { useCartStore } from '@/stores/cartStore.js'
 const cartStore = useCartStore()
+const handler = (i, value) => {
+    console.log('checbox绑定的i.selected改变了', value)
+    console.log('i', i)
+    cartStore.changeSelected(i.skuId, value)
+}
 </script>
 
 <template>
@@ -24,7 +29,7 @@ const cartStore = useCartStore()
           <tbody>
             <tr v-for="i in cartStore.cartList" :key="i.id">
               <td>
-                <el-checkbox />
+                <el-checkbox v-bind:model-value="i.selected" @change="(value) => handler(i, value)"/>
               </td>
               <td>
                 <div class="goods">

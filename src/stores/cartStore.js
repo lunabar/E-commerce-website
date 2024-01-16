@@ -21,6 +21,13 @@ export const useCartStore = defineStore('cartStore', () => {
         const index = cartList.value.findIndex((item) => item.skuId === skuId)
         cartList.value.splice(index,1)
     }
+
+    // 切换selected属性功能
+    const changeSelected = (skuId, selected) => {
+        const item = cartList.value.find((item) => item.skuId === skuId )
+        item.selected = selected
+    }
+
     // 计算属性总数和总价
     const allCount = computed(() => cartList.value.reduce((a,b) => a+b.count ,0 )
     )
@@ -30,6 +37,7 @@ export const useCartStore = defineStore('cartStore', () => {
         cartList,
         addCart,
         deleteCart,
+        changeSelected,
         allCount,
         allPrice,
     }
