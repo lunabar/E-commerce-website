@@ -6,6 +6,9 @@ const handler = (i, value) => {
     console.log('i', i)
     cartStore.changeSelected(i.skuId, value)
 }
+const allChecked = (value) => {
+    cartStore.checkAll(value)
+}
 </script>
 
 <template>
@@ -16,7 +19,7 @@ const handler = (i, value) => {
           <thead>
             <tr>
               <th width="120">
-                <el-checkbox/>
+                <el-checkbox :model-value='cartStore.isAll' @change="allChecked"/>
               </th>
               <th width="400">商品信息</th>
               <th width="220">单价</th>
