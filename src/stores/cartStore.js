@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useUserStore } from './user.js'
-import { insertCartAPI, findNewCartListAPI } from '@/apis/cart.js'
+import { insertCartAPI, findNewCartListAPI, delCartAPI } from '@/apis/cart.js'
 export const useCartStore = defineStore('cartStore', () => {
     // state
     const cartList = ref([])
@@ -10,17 +10,25 @@ export const useCartStore = defineStore('cartStore', () => {
     const isLogin = computed(() => userStore.userInfo.token)
     console.log('isLogin', isLogin)
     // active
+
+    // 优化有两行代码多次复用，调用新购物车商品表接口更新每次操作购物车商品的cartList
+    const updateCartList = async () => {
+        const res = await findNewCartListAPI()
+        console.log('获取最新购物车列表信息', res)
+        cartList.value = res.data.result
+    }
+
     const addCart = async (goodsParams) => {
         console.log('goodsParams:', goodsParams)
-        const {skuId, count} = goodsParams
-        console.log('{skuId, count}:',{skuId, count})
+        const { skuId, count } = goodsParams
+        console.log('{skuId, count}:', { skuId, count })
         // 添加购物车，若用户登录（token有效）调用接口
+        // isLogin类型是响应式的RefImpl
         if (isLogin.value) {
-            await insertCartAPI({skuId, count})
-            const res = await findNewCartListAPI()
-            console.log('获取最新购物车列表信息', res)
-            cartList.value = res.data.result
-        }else{
+            await insertCartAPI({ skuId, count })
+            // await insertCartAPI(goodsParams.skuId, goodsParams.count)
+            updateCartList()
+        } else {
             // 添加购物车操作，用户没登录，添加到本地购物车cartList写到localStorage里
             // 1.已添加过 - count +1
             // 没有添加过 - 直接push
@@ -33,17 +41,23 @@ export const useCartStore = defineStore('cartStore', () => {
             }
         }
 
-        
+
     }
     // 删除Header购物车里的指定商品
-    const deleteCart = (skuId) => {
-        const index = cartList.value.findIndex((item) => item.skuId === skuId)
-        cartList.value.splice(index,1)
+    const deleteCart = async (skuId) => {
+        if (isLogin.value) {
+            await delCartAPI([skuId])
+            updateCartList()
+        } else {
+            const index = cartList.value.findIndex((item) => item.skuId === skuId)
+            cartList.value.splice(index, 1)
+        }
+
     }
 
     // 切换selected属性功能
     const changeSelected = (skuId, selected) => {
-        const item = cartList.value.find((item) => item.skuId === skuId )
+        const item = cartList.value.find((item) => item.skuId === skuId)
         item.selected = selected
     }
 
@@ -51,12 +65,12 @@ export const useCartStore = defineStore('cartStore', () => {
     const checkAll = (selectedValue) => cartList.value.forEach(item => item.selected = selectedValue)
 
     // 单选决定全选,只有单选全部为selected，isAll才为true
-    const isAll = computed(() => cartList.value.every(item => item.selected===true))
+    const isAll = computed(() => cartList.value.every(item => item.selected === true))
 
     // 计算属性总数和总价
-    const allCount = computed(() => cartList.value.reduce((a,b) => a+b.count ,0 )
+    const allCount = computed(() => cartList.value.reduce((a, b) => a + b.count, 0)
     )
-    const allPrice = computed(() => cartList.value.reduce((a,b) => a+b.count * b.price ,0)
+    const allPrice = computed(() => cartList.value.reduce((a, b) => a + b.count * b.price, 0)
     )
 
     // 计算购物车列表详情的商品总数和总价
@@ -64,7 +78,7 @@ export const useCartStore = defineStore('cartStore', () => {
     const selectedCount = computed(() => cartList.value.filter(item => item.selected === true).reduce((a, c) => a + c.count, 0))
     // 商品合计
     const selectedPrice = computed(() => cartList.value.filter(item => item.selected === true).reduce((a, c) => a + c.count * c.price, 0))
-    
+
     return {
         cartList,
         addCart,
@@ -78,8 +92,8 @@ export const useCartStore = defineStore('cartStore', () => {
         selectedPrice,
     }
 },
-// 解决刷新页面不释放内存问题
-{
-    persist: true,
-},
+    // 解决刷新页面不释放内存问题
+    {
+        persist: true,
+    },
 )
