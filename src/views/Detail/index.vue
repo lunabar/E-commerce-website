@@ -36,7 +36,7 @@
           name: goods.value.name,
           picture: goods.value.mainPictures[0],
           price: goods.value.price,
-          count: count,
+          count: count.value,
           skuId: skuInfo.skuId,
           attrsText: skuInfo.specsText,
           selected: true,
