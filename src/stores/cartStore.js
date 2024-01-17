@@ -79,11 +79,18 @@ export const useCartStore = defineStore('cartStore', () => {
     // 商品合计
     const selectedPrice = computed(() => cartList.value.filter(item => item.selected === true).reduce((a, c) => a + c.count * c.price, 0))
 
+
+    // 退出登录清空cartList列表
+    const clearCartList = () => {
+        cartList.value = []
+    }
+
     return {
         cartList,
         addCart,
         deleteCart,
         changeSelected,
+        clearCartList,
         checkAll,
         allCount,
         allPrice,
