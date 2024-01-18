@@ -6,3 +6,12 @@ export function getCheckoutInfoAPI(){
         url: '/member/order/pre',
     })
 }
+
+// 创建订单, 生成订单id
+export function createOrderAPI(data){
+    return http({
+        url: '/member/order',
+        method: 'POST',
+        data,
+    })
+}

@@ -1,6 +1,11 @@
 <script setup>
-import { getCheckoutInfoAPI } from "@/apis/checkout.js";
+import { getCheckoutInfoAPI, createOrderAPI } from "@/apis/checkout.js";
 import { ref, onMounted } from "vue";
+import { useRouter } from 'vue-router'
+import { useCartStore } from '@/stores/cartStore.js'
+
+const cartStore = useCartStore()
+const router = useRouter()
 // 订单对象
 const checkInfo = ref({});
 // 默认地址
@@ -11,6 +16,7 @@ const getCheckoutInfo = async () => {
   const res = await getCheckoutInfoAPI();
   console.log("结算信息：", res);
   checkInfo.value = res.data.result;
+  console.log('checkInfo:',checkInfo)
   curAddress.value = checkInfo.value.userAddresses.find(
     (item) => item.isDefault === 0
   );
@@ -30,6 +36,29 @@ const confirm = () => {
     curAddress.value = activeAddress.value
     showDialog = false
     activeAddress.value = {}
+}
+
+// 调用创建订单接口，生成id，携id跳转支付路由
+const createOrder = async () => {
+    const res = await createOrderAPI({
+        deliveryTimeType: 1,
+        payType: 1,
+        payChannel: 1,
+        buyerMessage: '',
+        goods: checkInfo.value.goods.map(item => ({skuId: item.skuId, count: item.count})),
+        addressId: curAddress.value.id
+    })
+    console.log('提交订单生成订单信息：', res)
+    const orderId = res.data.result.id
+    // 路由规则不需要配query，显示在url上，刷新不丢失参数
+    router.push({
+        path: '/pay',
+        query: {
+            id: orderId,
+        },
+    })
+    // 跳转完页面后，购物车清空
+    cartStore.updateCartList()
 }
 
 
@@ -142,7 +171,7 @@ const confirm = () => {
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large">提交订单</el-button>
+          <el-button @click="createOrder" type="primary" size="large">提交订单</el-button>
         </div>
       </div>
     </div>
