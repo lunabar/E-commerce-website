@@ -91,6 +91,7 @@ export const useCartStore = defineStore('cartStore', () => {
         deleteCart,
         changeSelected,
         clearCartList,
+        updateCartList,
         checkAll,
         allCount,
         allPrice,

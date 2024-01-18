@@ -23,6 +23,15 @@ export function delCartAPI(ids){
     })
 }
 
+// 合并购物车
+export function mergeCartAPI(data){
+    return http({
+        url: '/member/cart/merge',
+        method: 'POST',
+        data,
+    })
+}
+
 // 获取最新的购物车列表
 export function findNewCartListAPI(){
     return http({
