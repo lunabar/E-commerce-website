@@ -3,6 +3,7 @@ import { getOrderAPI } from '@/apis/pay.js'
 import { useRoute } from 'vue-router'
 import { ref, onMounted} from 'vue'
 
+
 const route = useRoute()
 const orderInfo = ref({})
 const getOrderInfo = async () => {
