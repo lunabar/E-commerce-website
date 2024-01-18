@@ -6,7 +6,7 @@ const checkInfo = ref({});
 // 默认地址
 const curAddress = ref({});
 // 控制切换地址组件显示
-const showDialog = ref(false)
+let showDialog = ref(false)
 const getCheckoutInfo = async () => {
   const res = await getCheckoutInfoAPI();
   console.log("结算信息：", res);
@@ -17,6 +17,22 @@ const getCheckoutInfo = async () => {
   console.log("默认地址：", curAddress);
 };
 onMounted(() => getCheckoutInfo());
+
+// 切换地址，点击弹窗里某项地址，记录激活项
+const activeAddress = ref({})
+const recordInfo = (item) => {
+    activeAddress.value = item
+    console.log('激活地址信息：', activeAddress)
+}
+
+// 切换地址，选中新地址，确认，重新渲染默认地址版块，且关掉弹窗
+const confirm = () => {
+    curAddress.value = activeAddress.value
+    showDialog = false
+    activeAddress.value = {}
+}
+
+
 </script>
 
 <template>
@@ -138,7 +154,10 @@ onMounted(() => getCheckoutInfo());
         class="text item"
         v-for="item in checkInfo.userAddresses"
         :key="item.id"
+        @click="recordInfo(item)"
+        :class="{active: item.id === activeAddress.id}" 
       >
+      <!-- 类激活，判断条件：激活地址id和当前项id一样 -->
         <ul>
           <li>
             <span>收<i />货<i />人：</span>{{ item.receiver }}
@@ -151,7 +170,7 @@ onMounted(() => getCheckoutInfo());
     <template #footer>
       <span class="dialog-footer">
         <el-button>取消</el-button>
-        <el-button type="primary">确定</el-button>
+        <el-button type="primary" @click="confirm">确定</el-button>
       </span>
     </template>
   </el-dialog>
