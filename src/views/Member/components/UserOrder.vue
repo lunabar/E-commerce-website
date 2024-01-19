@@ -8,17 +8,31 @@ const params = ref({
 })
 // 订单列表
 const orderList = ref([])
+// 订单总条数
+const total = ref(0)
 const getUserOrder = async () => {
     const res = await getUserOrderAPI(params.value)
     console.log('会员中心的订单信息：', res)
     orderList.value = res.data.result.items
+    total.value = res.data.result.counts
 }
 onMounted(() => getUserOrder())
 
+// tab切换
 const tabChange = (orderState) => {
     params.value.orderState = orderState
+    params.value.page = 1
     getUserOrder()
 }
+
+// 切换页数时触发
+const currentPageChange = (currentPage) => {
+    params.value.page = currentPage
+    getUserOrder()
+}
+
+
+
 
 // tab列表
 const tabTypes = [
@@ -114,7 +128,7 @@ const tabTypes = [
           </div>
           <!-- 分页 -->
           <div class="pagination-container">
-            <el-pagination background layout="prev, pager, next" />
+            <el-pagination :total='total' :page-size='params.pageSize' @current-change='currentPageChange' background layout="prev, pager, next" />
           </div>
         </div>
       </div>
