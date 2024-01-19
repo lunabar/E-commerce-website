@@ -14,7 +14,7 @@ export const useCountDown = () => {
             time.value--
         }, 1000)
     }
-    // 组件销毁时清除定时器
+    // 组件销毁时清除定时器                    
     onUnmounted(() => {
         timer && clearInterval(timer)
     })
