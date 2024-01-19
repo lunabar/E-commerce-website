@@ -35,4 +35,4 @@ npm run lint
 ```
 
 ### 登录页
-![Image Text]([https://github.com/lunabar/E-commerce-website/blob/master/public/%E7%99%BB%E5%BD%95%E9%A1%B5.jpg])
+![Image Text](https://github.com/lunabar/E-commerce-website/blob/master/public/%E7%99%BB%E5%BD%95%E9%A1%B5.jpg)
