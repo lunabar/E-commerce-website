@@ -33,3 +33,6 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### 登录页
+![Image Text]([https://github.com/lunabar/JavaScript-SnakeGame/blob/master/%E8%B4%AA%E5%90%83%E8%9B%87/img/%E8%B4%AA%E5%90%83%E8%9B%87%E6%95%88%E6%9E%9C%E5%9B%BE.png](https://github.com/lunabar/E-commerce-website/blob/master/public/%E7%99%BB%E5%BD%95%E9%A1%B5.jpg)https://github.com/lunabar/E-commerce-website/blob/master/public/%E7%99%BB%E5%BD%95%E9%A1%B5.jpg)
