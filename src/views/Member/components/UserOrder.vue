@@ -15,6 +15,11 @@ const getUserOrder = async () => {
 }
 onMounted(() => getUserOrder())
 
+const tabChange = (orderState) => {
+    params.value.orderState = orderState
+    getUserOrder()
+}
+
 // tab列表
 const tabTypes = [
   { name: "all", label: "全部订单" },
@@ -31,7 +36,7 @@ const tabTypes = [
 
 <template>
   <div class="order-container">
-    <el-tabs>
+    <el-tabs @tab-change='tabChange'>
       <!-- tab切换 -->
       <el-tab-pane v-for="item in tabTypes" :key="item.name" :label="item.label" />
 
